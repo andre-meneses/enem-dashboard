@@ -24,7 +24,7 @@ def plot_geomap(df, var):
                                color=var,
                                mapbox_style='carto-positron',
                                center={"lat": -14.235, "lon": -51.9253},
-                               zoom=2,
+                               zoom=3,
                                opacity=0.5)
     fig.update_layout(margin={'r':0,'t':0,'l':0,'b':0})
 
