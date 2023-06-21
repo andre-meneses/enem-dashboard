@@ -1,0 +1,3 @@
+*.csv
+outils/
+__pycache__
