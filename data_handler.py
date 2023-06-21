@@ -26,10 +26,11 @@ def read_enem(file, redo=False):
     data_path = os.path.abspath(data_path)
 
     if os.path.exists(data_path) and not redo:
-        return np.load(data_path)
+        data = np.load(data_path, allow_pickle=True)
+        return pd.DataFrame.from_records(data)
 
     enem_data = process_enem_csv(file)
-    np.save(data_path, enem_data)
+    np.save(data_path, enem_data.to_records())
 
     return enem_data
 
@@ -42,6 +43,6 @@ if __name__ == '__main__':
     file_list = glob.glob(search_pattern)
 
     for file in file_list:
-        data = read_enem(file)
+        data = read_enem(file, redo=True)
         print(file)
 
