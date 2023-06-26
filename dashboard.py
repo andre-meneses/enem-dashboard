@@ -18,6 +18,7 @@ def streamlit_grade_plot():
 
     df = dh.read_enem('dados/enem_' + ano + '.csv')
 
+    
     map_plot = pr.plot_geomap(df, var)
     dist_plot = pr.plot_dist(df, var)
 

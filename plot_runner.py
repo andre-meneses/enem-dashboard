@@ -9,22 +9,17 @@ import seaborn as sns
 
 def plot_geomap(df, var, cat=False):
 
-    info_ufs = gpd.read_file('outils/bcim_2016_21_11_2018.gpkg', layer='lim_unidade_federacao_a')
-    info_ufs.rename({'sigla': 'SG_UF_ESC'}, axis=1, inplace=True)
+    df["Q006"].replace(['A', 'B', 'C','D','E','F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P','Q'], [1,1,1,1,1,1,2,2,2,2,3,3,3,3,4,4,4], inplace=True)
 
-    level_groups = {
-    1: ['A', 'B', 'C','D','E','F'],
-    2: ['G', 'H', 'I','J'],
-    3: ['K', 'L', 'M','N'],
-    4: ['O', 'P', 'Q']
-    }   
-
-    df['Q006'].replace(['A', 'B', 'C','D','E','F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P','Q'], [1,1,1,1,1,1,2,2,2,2,3,3,3,3,4,4,4], inplace=True) 
-    df['Q006'].convert_dtypes()
+    df["Q006"] = df['Q006'].convert_dtypes()
 
     df["MEDIA_NOTAS"] = df[["NU_NOTA_CN", "NU_NOTA_CH", "NU_NOTA_LC", "NU_NOTA_MT", "NU_NOTA_REDACAO"]].mean(axis=1)
 
-    # Agrupa os dados por estado e calcula a média das notas em cada prova
+
+    info_ufs = gpd.read_file('outils/bcim_2016_21_11_2018.gpkg', layer='lim_unidade_federacao_a')
+    info_ufs.rename({'sigla': 'SG_UF_ESC'}, axis=1, inplace=True)
+
+        # Agrupa os dados por estado e calcula a média das notas em cada prova
     if not cat:
         df_estado = df.groupby('SG_UF_ESC').mean().reset_index()
     else:
