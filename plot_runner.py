@@ -29,11 +29,17 @@ def plot_geomap(df, var, cat=False):
 
     # plot_estado = df_estado.plot(column='NU_NOTA_MT', cmap='viridis', legend=True, edgecolor='black')
 
+    if not cat:
+        color_values = df_estado[var].tolist()
+    else:
+        color_values = df_estado[var].apply(lambda x: str(x)).tolist()
+
+
     fig = px.choropleth_mapbox(df_estado,
                                geojson=df_estado.geometry,
                                locations=df_estado.index,
                                color_continuous_scale='deep', 
-                               color=var,
+                               color=color_values,
                                mapbox_style='carto-positron',
                                center={"lat": -14.235, "lon": -51.9253},
                                zoom=3,
@@ -43,7 +49,6 @@ def plot_geomap(df, var, cat=False):
     return fig
 
 def plot_violin(df, var):
-
     
     dados = df[["MEDIA_NOTAS", var]]
 
