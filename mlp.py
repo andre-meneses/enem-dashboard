@@ -14,7 +14,7 @@ def split_data(x, y, test_size=0.1):
     return x_train, x_test, y_train, y_test
 
 
-def create_mlp(hidden_layers=(100, 100, 100, 100, 100), activation='relu', max_iter=1000):
+def create_mlp(hidden_layers=(100, 100, 100, 100, 100), activation='relu', max_iter=10000):
     model = MLPRegressor(hidden_layer_sizes=hidden_layers,
                          activation=activation,
                          max_iter=max_iter,
@@ -38,7 +38,6 @@ def save_model(model, filename):
         print("Model saved successfully as", filename)
     except Exception as e:
         print("Error saving the model:", e)
-
 
 # Function to load a saved MLP model from a file
 def load_model(filename):
