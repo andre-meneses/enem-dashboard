@@ -5,9 +5,23 @@ import geopandas as gpd
 import plotly.express as px
 import numpy as np
 import seaborn as sns
+import graph_tool.all as gt
+import matplotlib.pyplot as plt
 
 
 def plot_geomap(df, var, cat=False):
+
+    """
+    Plot a choropleth map showing the geographical distribution of a given variable in the DataFrame.
+
+    Parameters:
+        df (pandas.DataFrame): The DataFrame containing the data to plot.
+        var (str): The column name in 'df' representing the variable to be plotted.
+        cat (bool, optional): If True, the variable is treated as categorical. Default is False.
+
+    Returns:
+        plotly.graph_objs._figure.Figure: The choropleth map figure.
+    """
 
     df["Q006"].replace(['A', 'B', 'C','D','E','F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P','Q'], [1,1,1,1,1,1,2,2,2,2,3,3,3,3,4,4,4], inplace=True)
 
@@ -49,6 +63,16 @@ def plot_geomap(df, var, cat=False):
     return fig
 
 def plot_violin(df, var):
+    """
+    Plot a violin plot to visualize the distribution of a numeric variable in relation to 'MEDIA_NOTAS'.
+
+    Parameters:
+        df (pandas.DataFrame): The DataFrame containing the data to plot.
+        var (str): The column name in 'df' representing the variable to be plotted.
+
+    Returns:
+        matplotlib.axes._subplots.AxesSubplot: The violin plot.
+    """
     
     dados = df[["MEDIA_NOTAS", var]]
 
@@ -56,17 +80,58 @@ def plot_violin(df, var):
     return fig
 
 def plot_dist(df, var):
+    """
+    Plot a histogram to visualize the distribution of a numeric variable.
+
+    Parameters:
+        df (pandas.DataFrame): The DataFrame containing the data to plot.
+        var (str): The column name in 'df' representing the variable to be plotted.
+
+    Returns:
+        matplotlib.axes._subplots.AxesSubplot: The histogram plot.
+    """
 
     # Plotando um histograma da distribuição da média das notas
     fig = sns.histplot(data=df, x=var, kde=True)
 
     return fig
 
+def plot_clustering(df, var):
+
+    """
+    Plot a scatter plot for clustering visualization based on coordinates 'X' and 'Y'.
+
+    Parameters:
+        df (pandas.DataFrame): The DataFrame containing the data to plot.
+        var (str): The value of 'SG_AREA' used to select appropriate rows for plotting.
+
+    Returns:
+        None (displays the scatter plot).
+    """
+
+    # Select appropriate rows
+    dados = df.drop_duplicates(subset=['CO_ITEM'])
+    dados = dados[dados['SG_AREA'] == var].reset_index()
+
+    sns.scatterplot(x='X', y='Y', data=dados, hue='CO_HABILIDADE')
+
+    # Set labels and title
+    plt.xlabel('X')
+    plt.ylabel('Y')
+    plt.title('Groups Scatter Plot')
+
+    # Show the plot
+    plt.show()
+
 if __name__ == "__main__":
-    st.write("""
+    # st.write("""
              # Testando o plot
-             """)
+             # """)
+
+    df = data_handler.read_enem('enem_data/itens/itens_prova_2016.csv', itens=True)
+    plot_clustering(df,'MT')
+
     
-    df = data_handler.read_enem('enem_data/enem_2018.csv')
-    st.plotly_chart(plot_geomap(df, 'NU_NOTA_CN'))
+    # df = data_handler.read_enem('enem_data/enem_2018.csv')
+    # st.plotly_chart(plot_geomap(df, 'NU_NOTA_CN'))
 
