@@ -35,7 +35,7 @@ def plot_geomap(df, var, cat=False):
 
         # Agrupa os dados por estado e calcula a média das notas em cada prova
     if not cat:
-        df_estado = df.groupby('SG_UF_ESC').mean().reset_index()
+        df_estado = df.groupby('SG_UF_ESC').mean(numeric_only=True).reset_index()
     else:
         df_estado = df.groupby('SG_UF_ESC').agg(pd.Series.mode)
 
