@@ -13,7 +13,7 @@ def process_enem_csv(file, frac=0.01):
 
     return pd.concat(sampled_chunks)
 
-def read_enem(file, redo=False):
+def read_enem(file, redo=False, itens=False):
     """
     Reads a csv for enem microdata.
 
@@ -22,27 +22,36 @@ def read_enem(file, redo=False):
         redo(bool): If true, the data will be reloaded regardless of 
     """
     file_path = os.path.basename(file)
-    data_path = 'enem_data/' + file_path + '.npy'
+
+    if itens:
+        data_path = 'enem_data/itens/' + file_path + '.npy'
+    else:
+        data_path = 'enem_data/' + file_path + '.npy'
+
     data_path = os.path.abspath(data_path)
 
     if os.path.exists(data_path) and not redo:
         data = np.load(data_path, allow_pickle=True)
         return pd.DataFrame.from_records(data)
 
-    enem_data = process_enem_csv(file)
+    if not itens:
+        enem_data = process_enem_csv(file)
+    else: 
+        enem_data = pd.read_csv(file, encoding='ISO-8859-1', on_bad_lines='skip', sep=';')
+        
     np.save(data_path, enem_data.to_records())
 
     return enem_data
 
 if __name__ == '__main__':
 
-    folder_path = 'enem_data/' 
+    folder_path = 'enem_data/itens/' 
     extension = '.csv'
 
     search_pattern = os.path.join(folder_path, f'*{extension}')
     file_list = glob.glob(search_pattern)
 
     for file in file_list:
-        data = read_enem(file, redo=True)
+        data = read_enem(file, redo=True, itens=True)
         print(file)
 
