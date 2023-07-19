@@ -1,7 +1,9 @@
 import streamlit as st
 import plot_runner as pr
 import data_handler as dh
-
+from mlp import load_model
+from sklearn.neural_network import MLPRegressor
+import numpy as np
 
 def streamlit_grade_plot():
     """
@@ -121,11 +123,39 @@ def streamlit_income_plot():
     st.write("""### Violin Plot""")
     st.pyplot(renda_plot.figure)
 
-
 def main():
+
     st.write("""# Microdados ENEM 2016-2020""")
 
     plot = st.sidebar.selectbox('Plot:', ['Notas', 'Participantes', 'Dados socioeconômicos'])
+
+    st.sidebar.write("Previsão Nota ")
+
+    col1, col2 = st.sidebar.columns(2)
+
+    acertos_cn = col1.number_input("Acertos CN:", value=25)
+    acertos_ch = col2.number_input("Acertos CH:", value=25)
+    acertos_mt = col1.number_input("Acertos MT:", value=25)
+    acertos_lc = col2.number_input("Acertos LC:", value=25)
+
+    model_cn = load_model('models/trained_model_CN.joblib')
+    model_ch = load_model('models/trained_model_CH.joblib')
+    model_mt = load_model('models/trained_model_MT.joblib')
+    model_lc = load_model('models/trained_model_LC.joblib')
+
+    nota_cn = model_cn.predict(np.array(acertos_cn).reshape(1,-1))
+    nota_ch = model_ch.predict(np.array(acertos_ch).reshape(1,-1))
+    nota_mt = model_mt.predict(np.array(acertos_mt).reshape(1,-1))
+    nota_lc = model_lc.predict(np.array(acertos_lc).reshape(1,-1))
+
+    cn = col1.empty()
+    cn.write(f"Nota CN: {nota_cn}")
+    ch = col2.empty()
+    ch.write(f"Nota CH: {nota_ch}")
+    mt = col1.empty()
+    mt.write(f"Nota MT: {nota_mt}")
+    lc = col2.empty()
+    lc.write(f"Nota LC: {nota_lc}")
 
     if plot == 'Notas':
         streamlit_grade_plot()
@@ -133,7 +163,6 @@ def main():
         streamlit_categorical_plot()
     if plot == 'Dados socioeconômicos':
         streamlit_income_plot()
-
 
 if __name__ == '__main__':
     main()
