@@ -59,16 +59,21 @@ After running the command, the dashboard will be accessible in your web browser 
 ### Average Score Visualization:
 <center><img width="800" src="figures/notas1.png"></center>
 <center><img width="800" src="figures/notas2.png"></center>
+
 ### Distribution of Scores:
 <center><img width="800" src="figures/dist1.png"></center>
 <center><img width="800" src="figures/dist2.png"></center>
+
 ### Demographic Insights:
 <center><img width="800" src="figures/demographics1.png"></center>
 <center><img width="800" src="figures/demographics2.png"></center>
+
 ### Violin Plots:
 <center><img width="800" src="figures/violin.png"></center>
+
 ### Question Difficulty Analysis:
 <center><img width="800" src="figures/questions.png"></center>
+
 ### Predictor:
 <center><img width="800" src="figures/predictor.png"></center>
 
