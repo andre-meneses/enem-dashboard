@@ -1,13 +1,13 @@
 import pandas as pd
+import networkx as nx
 import data_handler
 import streamlit as st
 import geopandas as gpd
 import plotly.express as px
 import numpy as np
 import seaborn as sns
-import graph_tool.all as gt
+from graph_tool.all import *
 import matplotlib.pyplot as plt
-
 
 def plot_geomap(df, var, cat=False):
 
@@ -96,32 +96,51 @@ def plot_dist(df, var):
 
     return fig
 
-def plot_clustering(df, var):
+def plot_itens(df, target_sg_area=None):
 
-    """
-    Plot a scatter plot for clustering visualization based on coordinates 'X' and 'Y'.
+    df = df.drop_duplicates(subset=['CO_ITEM'])
 
-    Parameters:
-        df (pandas.DataFrame): The DataFrame containing the data to plot.
-        var (str): The value of 'SG_AREA' used to select appropriate rows for plotting.
+    df = df.dropna(subset=['SG_AREA', 'NU_PARAM_B'])
 
-    Returns:
-        None (displays the scatter plot).
-    """
+    # Step 2: Create a NetworkX graph
+    G = nx.Graph()
 
-    # Select appropriate rows
-    dados = df.drop_duplicates(subset=['CO_ITEM'])
-    dados = dados[dados['SG_AREA'] == var].reset_index()
+    # Step 3: Add nodes with unique identifiers (SG_AREA + NU_PARAM_B) as node labels
+    for _, row in df.iterrows():
+        node_id = f"{row['SG_AREA']}_{row['NU_PARAM_B']}"
+        G.add_node(node_id, SG_AREA=row['SG_AREA'], NU_PARAM_B=row['NU_PARAM_B'])
 
-    sns.scatterplot(x='X', y='Y', data=dados, hue='CO_HABILIDADE')
+    # Step 4: Connect nodes with the same 'SG_AREA' value
+    for area in df['SG_AREA'].unique():
+        nodes_with_area = df[df['SG_AREA'] == area]
+        node_ids = [f"{row['SG_AREA']}_{row['NU_PARAM_B']}" for _, row in nodes_with_area.iterrows()]
+        G.add_edges_from((a, b) for a in node_ids for b in node_ids if a != b)
 
-    # Set labels and title
-    plt.xlabel('X')
-    plt.ylabel('Y')
-    plt.title('Groups Scatter Plot')
+    # Filter the graph to display only the specified 'SG_AREA'
+    if target_sg_area is not None:
+        nodes_to_remove = [node for node in G.nodes if not node.startswith(target_sg_area)]
+        G.remove_nodes_from(nodes_to_remove)
 
-    # Show the plot
-    plt.show()
+    # Draw the graph with nodes colored according to 'NU_PARAM_B'
+
+    fig, ax = plt.subplots(1, 1, figsize=(10, 8))
+
+    pos = nx.spring_layout(G)  # Position nodes using the spring layout algorithm
+    color = [G.nodes[node]['NU_PARAM_B'] for node in G.nodes]
+
+    # nx.draw_networkx_edges(G, pos=pos, alpha=0.4, ax=ax)
+
+    # Draw nodes
+    nodes = nx.draw_networkx_nodes(G, pos=pos, node_color=color, cmap=plt.cm.jet, ax=ax)
+
+    # Draw labels
+    nx.draw_networkx_labels(G, pos=pos, font_color='black', font_size=8, ax=ax)
+
+    plt.axis("off")
+    plt.colorbar(nodes)
+
+
+    return fig 
 
 if __name__ == "__main__":
     # st.write("""

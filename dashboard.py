@@ -123,11 +123,31 @@ def streamlit_income_plot():
     st.write("""### Violin Plot""")
     st.pyplot(renda_plot.figure)
 
+def streamlit_itens_plot():
+    """
+    Displays a streamlit plot for question itens.
+    """
+
+    col1, col2 = st.columns(2)
+
+    variables = ['CN', 'CH', 'MT', 'LC']
+    anos = ['2016', '2017', '2018', '2019', '2020']
+
+    var = col1.selectbox('Selecione a variável', variables)
+
+    ano = col2.select_slider('Selecione o ano', anos, key='bbb')
+
+    df = dh.read_enem(f'itens_prova_{ano}.csv', itens=True)
+
+    plot = pr.plot_itens(df, var)
+
+    st.pyplot(plot)
+
 def main():
 
     st.write("""# Microdados ENEM 2016-2020""")
 
-    plot = st.sidebar.selectbox('Plot:', ['Notas', 'Participantes', 'Dados socioeconômicos'])
+    plot = st.sidebar.selectbox('Visualização:', ['Notas', 'Participantes', 'Dados socioeconômicos', 'Questões'])
 
     st.sidebar.write("Previsão Nota ")
 
@@ -163,6 +183,8 @@ def main():
         streamlit_categorical_plot()
     if plot == 'Dados socioeconômicos':
         streamlit_income_plot()
+    if plot == 'Questões':
+        streamlit_itens_plot()
 
 if __name__ == '__main__':
     main()
