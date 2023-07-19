@@ -1,11 +1,5 @@
 # ENEM Dashboard
 
-## Introduction
-
-This dashboard is built using Streamlit and provides an interactive interface to explore ENEM (Exame Nacional do Ensino Médio) data from the years 2016 to 2020. The ENEM is a standardized exam used in Brazil to assess high school students' knowledge and skills, and it plays a significant role in university admissions.
-
-The dashboard allows users to gain insights into various aspects of the ENEM data, including average scores per type of exam and per state, distribution of scores for each exam in a specific year, most common race and age for each state in each year, violin plots depicting the distribution of grades per wealth strat, and difficulty of questions for each year and exam.
-
 ## Table of Contents
 - [Introduction](#introduction)
 - [Features](#features)
@@ -14,6 +8,13 @@ The dashboard allows users to gain insights into various aspects of the ENEM dat
 - [Screenshots](#screenshots)
 - [Data Sources](#data-sources)
 - [Contributing](#contributing)
+
+
+## Introduction
+
+This dashboard is built using Streamlit and provides an interactive interface to explore ENEM (Exame Nacional do Ensino Médio) data from the years 2016 to 2020. The ENEM is a standardized exam used in Brazil to assess high school students' knowledge and skills, and it plays a significant role in university admissions.
+
+The dashboard allows users to gain insights into various aspects of the ENEM data, including average scores per type of exam and per state, distribution of scores for each exam in a specific year, most common race and age for each state in each year, violin plots depicting the distribution of grades per wealth strat, and difficulty of questions for each year and exam.
 
 ## Features
 1. The ENEM Dashboard offers the following features:
