@@ -1,84 +1,160 @@
 # ENEM Dashboard
 
-## Table of Contents
-- [Introduction](#introduction)
-- [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Screenshots](#screenshots)
-- [Data Sources](#data-sources)
-- [Contributing](#contributing)
-
-
-## Introduction
-
-This dashboard is built using Streamlit and provides an interactive interface to explore ENEM (Exame Nacional do Ensino Médio) data from the years 2016 to 2020. The ENEM is a standardized exam used in Brazil to assess high school students' knowledge and skills, and it plays a significant role in university admissions.
-
-The dashboard allows users to gain insights into various aspects of the ENEM data, including average scores per type of exam and per state, distribution of scores for each exam in a specific year, most common race and age for each state in each year, violin plots depicting the distribution of grades per wealth strat, and difficulty of questions for each year and exam.
+## Overview
+The ENEM Dashboard is an interactive data visualization tool built with Streamlit that analyzes Brazilian National High School Exam (ENEM) data from 2016 to 2020. ENEM is Brazil's primary standardized test for university admissions, making this dashboard valuable for educators, researchers, and policymakers interested in educational trends and outcomes.
 
 ## Features
-1. The ENEM Dashboard offers the following features:
 
-2. Average Score Visualization: Users can view the average score per type of exam and per state for each year.
+### Data Visualization
+- **Geographic Distribution**: Interactive maps showing average scores across Brazilian states
+- **Score Analysis**:
+  - Average scores by exam type (Mathematics, Natural Sciences, Languages, Human Sciences)
+  - Score distribution visualizations for each exam type
+  - Year-over-year score comparisons (2016-2020)
 
-3. Distribution of Scores: Users can explore the distribution of scores for each exam in a specific year.
+### Demographic Insights
+- **Population Statistics**:
+  - Race and age distribution by state and year
+  - Socioeconomic analysis using violin plots
+  - Wealth strata correlation with performance
 
-4. Demographic Insights: The dashboard displays the most common race and age group for each state in each year.
+### Question Analysis
+- **Difficulty Metrics**:
+  - Question difficulty assessment for each exam type
+  - Year-by-year difficulty comparisons
+  - Subject-specific question analysis
 
-5. Violin Plots: Users can analyze the distribution of grades based on different wealth strata using violin plots.
-
-6. Question Difficulty Analysis: The dashboard provides insights into the difficulty of questions for each year and each exam.
-
-7. Score Predictor: The ENEM Dashboard includes a score predictor powered by Multilayer Perceptrons (MLPs). This predictor allows users to estimate their potential scores based on selected parameters. 
+### Score Predictor
+- **Machine Learning Model**:
+  - Score prediction using Multilayer Perceptrons (MLPs)
+  - Based on number of correct answers per subject
+  - Individual subject score estimates
 
 ## Installation
-1. Clone this repository to your local machine or download the ZIP file and extract it.
 
-2. Navigate to the project directory using the command line.
+### Prerequisites
+- Python 3.7+
+- pip package manager
+- Git (optional)
 
-3. Create a virtual environment (optional but recommended).
-
-4. Install the required dependencies using pip:
-
+### Setup Steps
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/enem-dashboard.git
+cd enem-dashboard
 ```
+
+2. Create and activate a virtual environment (recommended):
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
+
+3. Install dependencies:
+```bash
 pip install -r requirements.txt
-
 ```
-5. To ensure the correct display of geo plots, download the file bcim_2016_21_11_2018.gpkg from the official IBGE website: https://www.ibge.gov.br/geociencias/downloads-geociencias.html and store it a folder called 'outils/'.
 
+4. Download required geospatial data:
+   - Visit the [IBGE website](https://www.ibge.gov.br/geociencias/downloads-geociencias.html)
+   - Download `bcim_2016_21_11_2018.gpkg`
+   - Place it in the `outils/` directory
 
 ## Usage
-To run the ENEM Dashboard, use the following command in the project directory:
-```
-streamlit run dashboard.py
 
+### Running the Dashboard
+1. Start the Streamlit server:
+```bash
+streamlit run dashboard.py
 ```
-After running the command, the dashboard will be accessible in your web browser at http://localhost:8501.
+
+2. Access the dashboard:
+   - Open your web browser
+   - Navigate to `http://localhost:8501`
+
+### Using the Interface
+
+#### Score Analysis
+- Select exam type from dropdown menu
+- Choose year using slider
+- View geographic distribution and score histograms
+
+#### Demographic Analysis
+- Switch between race and age group visualizations
+- Filter by year and state
+- Explore correlation with performance
+
+#### Question Difficulty
+- Select subject area
+- Compare difficulty levels across years
+- Analyze question characteristics
+
+#### Score Predictor
+- Enter number of correct answers for each subject
+- Get estimated scores based on ML model
+- View prediction confidence intervals
+
+## Technical Details
+
+### Data Pipeline
+1. Data sourcing from [INEP](https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/enem)
+2. Preprocessing and sampling of large datasets
+3. Geographic data integration with IBGE shapefiles
+4. Machine learning model training and validation
+
+### Components
+- **Frontend**: Streamlit
+- **Data Processing**: Pandas, NumPy
+- **Visualization**: Plotly, Seaborn
+- **Machine Learning**: Scikit-learn (MLPRegressor)
+- **Geospatial Analysis**: GeoPandas
+
+### Performance Optimizations
+- Efficient data loading with chunking
+- Caching of processed data
+- Optimized ML model persistence
 
 ## Screenshots
-### Average Score Visualization:
-<center><img width="800" src="figures/notas1.png"></center>
-<center><img width="800" src="figures/notas2.png"></center>
 
-### Distribution of Scores:
-<center><img width="800" src="figures/dist1.png"></center>
-<center><img width="800" src="figures/dist2.png"></center>
+### Score Distribution
+![Score Distribution](figures/notas1.png)
+*Geographic distribution of ENEM scores*
 
-### Demographic Insights:
-<center><img width="800" src="figures/demographics1.png"></center>
-<center><img width="800" src="figures/demographics2.png"></center>
+![Score Analysis](figures/notas2.png)
+*Detailed score analysis view*
 
-### Violin Plots:
-<center><img width="800" src="figures/violin.png"></center>
+### Demographics
+![Demographics Analysis](figures/demographics1.png)
+*Demographic distribution across states*
 
-### Question Difficulty Analysis:
-<center><img width="800" src="figures/questions.png"></center>
+![Detailed Demographics](figures/demographics2.png)
+*Detailed demographic breakdown*
 
-### Predictor:
-<center><img width="800" src="figures/predictor.png"></center>
-
-## Data Sources
-The ENEM data used in this dashboard is sourced from https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos/microdados/enem.
+### Score Prediction
+![Score Predictor](figures/predictor.png)
+*ML-based score prediction interface*
 
 ## Contributing
-We welcome contributions to improve the ENEM Dashboard. If you find any issues or have suggestions for enhancements, feel free to open an issue or create a pull request.
+
+### How to Contribute
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit changes (`git commit -m 'Add AmazingFeature'`)
+4. Push to branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+### Development Guidelines
+- Follow PEP 8 style guidelines
+- Add tests for new features
+- Update documentation as needed
+- Maintain backwards compatibility
+
+## License
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgments
+- INEP for providing ENEM microdata
+- IBGE for geospatial data
+
+## Contact
+For questions and feedback, please open an issue on the GitHub repository.
